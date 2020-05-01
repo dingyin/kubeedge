@@ -36,6 +36,7 @@ kubectl delete daemonset kindnet -nkube-system
 export KUBECONFIG=$HOME/.kube/config
 sudo mkdir -p /var/lib/kubeedge
 sudo ${curpath}/_output/local/bin/keadm init --kube-config=$KUBECONFIG
+# set environment variable for e2e test
 sudo systemctl set-environment CHECK_EDGECORE_ENVIRONMENT="false"
 sudo CHECK_EDGECORE_ENVIRONMENT="false" ${curpath}/_output/local/bin/keadm join --cloudcore-ipport=127.0.0.1:10000 --edgenode-name=edge-node
 
