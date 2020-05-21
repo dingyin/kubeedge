@@ -455,11 +455,15 @@ func runEdgeCore(version string) error {
 	}
 
 	var binExec string
-	if version >= "1.1.0" {
+
+	systemdExist := hasSystemd()
+
+	if version >= "1.1.0" && systemdExist {
 		binExec = "sudo ln /etc/kubeedge/edgecore.service /etc/systemd/system/edgecore.service && sudo systemctl daemon-reload && sudo systemctl enable edgecore && sudo systemctl start edgecore"
 	} else {
 		binExec = fmt.Sprintf("%s > %skubeedge/edge/%s.log 2>&1 &", KubeEdgeBinaryName, KubeEdgePath, KubeEdgeBinaryName)
 	}
+
 	cmd := &Command{Cmd: exec.Command("sh", "-c", binExec)}
 	cmd.Cmd.Env = os.Environ()
 	env := fmt.Sprintf("GOARCHAIUS_CONFIG_PATH=%skubeedge/edge", KubeEdgePath)
@@ -472,7 +476,11 @@ func runEdgeCore(version string) error {
 	fmt.Println(cmd.GetStdOutput())
 
 	if version >= "1.1.0" {
-		fmt.Println("KubeEdge edgecore is running, For logs visit: ", KubeEdgeLogPath+KubeEdgeBinaryName+".log")
+		if systemdExist {
+			fmt.Println("KubeEdge edgecore is running, For logs visit: journalctl -u edgecore.service -b")
+		} else {
+			fmt.Println("KubeEdge edgecore is running, For logs visit: ", KubeEdgeLogPath+KubeEdgeBinaryName+".log")
+		}
 	} else {
 		fmt.Println("KubeEdge edgecore is running, For logs visit", KubeEdgePath, "kubeedge/edge/")
 	}
@@ -486,7 +494,13 @@ func killKubeEdgeBinary(proc string) error {
 	if proc == "cloudcore" {
 		binExec = fmt.Sprintf("kill -9 $(ps aux | grep '[%s]%s' | awk '{print $2}')", proc[0:1], proc[1:])
 	} else {
-		binExec = fmt.Sprintf("systemctl stop %s.service && sudo rm /etc/systemd/system/%s.service", proc, proc)
+		systemdExist := hasSystemd()
+		if systemdExist {
+			// move the log to /var/log/kubeedge/edgecore.log and then remove the system service.
+			binExec = fmt.Sprintf("journalctl -u edgecore.service -b > "+KubeEdgeLogPath+proc+".log"+" && systemctl stop %s.service && sudo rm /etc/systemd/system/%s.service", proc, proc)
+		} else {
+			binExec = fmt.Sprintf("kill -9 $(ps aux | grep '[%s]%s' | awk '{print $2}')", proc[0:1], proc[1:])
+		}
 	}
 	if _, err := runCommandWithStdout(binExec); err != nil {
 		return err
@@ -524,4 +538,22 @@ func isEdgeCoreServiceRunning() (bool, error) {
 	}
 
 	return false, nil
+}
+
+//	check if systemd exist
+func hasSystemd() bool {
+
+	cmd := "file /sbin/init"
+
+	stdout, err := runCommandWithStdout(cmd)
+
+	if err != nil {
+		return false
+	}
+
+	if strings.Contains(stdout, "systemd") {
+		return true
+	}
+
+	return false
 }
