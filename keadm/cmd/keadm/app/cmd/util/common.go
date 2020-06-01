@@ -385,13 +385,13 @@ func installKubeEdge(componentType types.ComponentType, arch string, version str
 	if componentType == types.EdgeCore {
 		edgecoreServiceFileName := "edgecore.service"
 		if _, err = os.Stat(KubeEdgePath + edgecoreServiceFileName); err == nil {
-			fmt.Println("Expected or Default Edgecore service file is already downloaded")
+			fmt.Println("Edgecore service file exists, skip download")
 		} else if !os.IsNotExist(err) {
 			return err
 		} else {
 			try := 0
 			for ; try < downloadRetryTimes; try++ {
-				cmdStr := fmt.Sprintf("cd %s && sudo wget -k --no-check-certificate %s", KubeEdgePath, EdgecoreServiceFileURL)
+				cmdStr := fmt.Sprintf("cd %s && sudo curl -k --no-check-certificate %s", KubeEdgePath, EdgecoreServiceFileURL)
 				_, err := runCommandWithStdout(cmdStr)
 				if err != nil {
 					return err
@@ -497,7 +497,7 @@ func killKubeEdgeBinary(proc string) error {
 		systemdExist := hasSystemd()
 		if systemdExist {
 			// move the log to /var/log/kubeedge/edgecore.log and then remove the system service.
-			binExec = fmt.Sprintf("journalctl -u edgecore.service -b > "+KubeEdgeLogPath+proc+".log"+" && systemctl stop %s.service && sudo rm /etc/systemd/system/%s.service", proc, proc)
+			binExec = fmt.Sprintf("journalctl -u edgecore.service -b > "+KubeEdgeLogPath+proc+".log"+" && systemctl stop %s.service && sudo rm /etc/systemd/system/%s.service && sudo systemctl daemon-reload && systemctl reset-failed", proc, proc)
 		} else {
 			binExec = fmt.Sprintf("kill -9 $(ps aux | grep '[%s]%s' | awk '{print $2}')", proc[0:1], proc[1:])
 		}
