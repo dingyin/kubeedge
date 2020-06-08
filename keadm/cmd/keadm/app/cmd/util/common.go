@@ -503,8 +503,9 @@ func runEdgeCore(version string) error {
 
 	systemdExist := hasSystemd()
 
+	edgecoreServiceName := "edgecore"
+
 	if version >= "1.1.0" && systemdExist {
-		edgecoreServiceName := "edgecore"
 		if version == "1.1" || version == "1.1.0" {
 			edgecoreServiceName = "edge"
 		}
@@ -526,7 +527,7 @@ func runEdgeCore(version string) error {
 
 	if version >= "1.1.0" {
 		if systemdExist {
-			fmt.Println("KubeEdge edgecore is running, For logs visit: journalctl -u edgecore.service -b")
+			fmt.Printf("KubeEdge edgecore is running, For logs visit: journalctl -u %s.service -b\n", edgecoreServiceName)
 		} else {
 			fmt.Println("KubeEdge edgecore is running, For logs visit: ", KubeEdgeLogPath+binaryName+".log")
 		}
