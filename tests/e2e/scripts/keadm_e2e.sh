@@ -45,6 +45,8 @@ function prepare_cluster() {
 function start_kubeedge() {
   sudo mkdir -p /var/lib/kubeedge
   cd $KUBEEDGE_ROOT
+  export KUBECONFIG=$HOME/.kube/config
+
   sudo -E _output/local/bin/keadm init --kube-config=$KUBECONFIG --advertise-address=127.0.0.1
   export MASTER_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-control-plane`
 
@@ -53,6 +55,8 @@ function start_kubeedge() {
       sleep 3
       kubectl get secret -nkubeedge 2>/dev/null | grep -q tokensecret && break
   done
+  # set environment variable for e2e test
+  sudo CHECK_EDGECORE_ENVIRONMENT="false" ${curpath}/_output/local/bin/keadm join --cloudcore-ipport=127.0.0.1:10000 --edgenode-name=edge-node
 
   export TOKEN=$(sudo _output/local/bin/keadm gettoken --kube-config=$KUBECONFIG)
   sudo -E CHECK_EDGECORE_ENVIRONMENT="false" _output/local/bin/keadm join --token=$TOKEN --cloudcore-ipport=127.0.0.1:10000 --edgenode-name=edge-node
