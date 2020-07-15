@@ -17,6 +17,7 @@ limitations under the License.
 package crds
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"testing"
@@ -79,7 +80,7 @@ func TestValidDeviceModel(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s : json marshal error : %v", name, err)
 			}
-			result := crdClient.Post().Name(deviceModel.Name).Namespace(deviceModel.Namespace).Resource(fixtures.ResourceDeviceModel).Body(respBytes).Do()
+			result := crdClient.Post().Name(deviceModel.Name).Namespace(deviceModel.Namespace).Resource(fixtures.ResourceDeviceModel).Body(respBytes).Do(context.Background())
 			if result.Error() != nil {
 				t.Fatalf("%s: expected nil err , got %v", name, result.Error())
 			}
@@ -172,7 +173,7 @@ func TestInvalidDeviceModel(t *testing.T) {
 				t.Fatalf("%s : error while marshalling device model : %v", name, err)
 			}
 			result := crdClient.Post().Name(deviceModel.Name).Namespace(deviceModel.Namespace).Resource(fixtures.ResourceDeviceModel).
-				Body(deviceModelJSON).Do()
+				Body(deviceModelJSON).Do(context.Background())
 			if result.Error() == nil {
 				t.Fatalf("%s: expected error", name)
 			}
@@ -214,7 +215,7 @@ func TestValidDevice(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s : error while marshalling device : %v", name, err)
 			}
-			result := crdClient.Post().Name(device.Name).Namespace(device.Namespace).Resource(fixtures.ResourceDevice).Body(deviceJSON).Do()
+			result := crdClient.Post().Name(device.Name).Namespace(device.Namespace).Resource(fixtures.ResourceDevice).Body(deviceJSON).Do(context.Background())
 			if result.Error() != nil {
 				t.Fatalf("%s expected nil err , got %v", name, result.Error())
 			}
@@ -334,7 +335,7 @@ func TestInvalidDevice(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s : error while marshalling device : %v", name, err)
 			}
-			result := crdClient.Post().Name(device.Name).Namespace(device.Namespace).Resource(fixtures.ResourceDevice).Body(deviceJSON).Do()
+			result := crdClient.Post().Name(device.Name).Namespace(device.Namespace).Resource(fixtures.ResourceDevice).Body(deviceJSON).Do(context.Background())
 			if result.Error() == nil {
 				t.Fatalf("%s : expected error", name)
 			}
