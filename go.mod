@@ -67,20 +67,20 @@ require (
 	google.golang.org/grpc v1.26.0
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8
-	k8s.io/api v0.18.5
-	k8s.io/apiextensions-apiserver v0.18.5
-	k8s.io/apimachinery v0.18.5
-	k8s.io/apiserver v0.18.5
-	k8s.io/client-go v0.18.5
-	k8s.io/cloud-provider v0.17.1
-	k8s.io/code-generator v0.18.5
-	k8s.io/component-base v0.18.5
-	k8s.io/cri-api v0.18.5
-	k8s.io/csi-translation-lib v0.17.1
+	k8s.io/api v0.18.0
+	k8s.io/apiextensions-apiserver v0.18.0
+	k8s.io/apimachinery v0.18.0
+	k8s.io/apiserver v0.18.0
+	k8s.io/client-go v0.18.0
+	k8s.io/cloud-provider v0.18.0
+	k8s.io/code-generator v0.18.0
+	k8s.io/component-base v0.18.0
+	k8s.io/cri-api v0.18.0
+	k8s.io/csi-translation-lib v0.18.0
 	k8s.io/klog v1.0.0
 	k8s.io/kube-openapi v0.0.0-20200410145947-61e04a5be9a6
-	k8s.io/kube-scheduler v0.18.5 // indirect
-	k8s.io/kubelet v0.17.1
+	k8s.io/kube-scheduler v0.18.0 // indirect
+	k8s.io/kubelet v0.18.0
 	k8s.io/kubernetes v1.18.0
 	k8s.io/utils v0.0.0-20200324210504-a9aa75ae1b89
 	sigs.k8s.io/structured-merge-diff v1.0.1-0.20191108220359-b1b620dd3f06 // indirect
@@ -116,7 +116,7 @@ replace (
 	k8s.io/kube-openapi v0.0.0 => k8s.io/kube-openapi v0.0.0-20190718094010-3cf2ea392886 // indirect
 	k8s.io/kube-proxy v0.0.0 => k8s.io/kube-proxy v0.0.0-20190718185641-5233cb7cb41e
 	k8s.io/kube-scheduler v0.0.0 => k8s.io/kube-scheduler v0.0.0-20190718185913-d5429d807831
-	k8s.io/kubectl => k8s.io/kubectl v0.17.0
+	k8s.io/kubectl => k8s.io/kubectl v0.18.0
 	k8s.io/kubelet v0.0.0 => k8s.io/kubelet v0.0.0-20190718185757-9b45f80d5747
 	k8s.io/legacy-cloud-providers v0.0.0 => k8s.io/legacy-cloud-providers v0.0.0-20190718190548-039b99e58dbd
 	k8s.io/metrics v0.0.0 => k8s.io/metrics v0.0.0-20190718185242-1e1642704fe6
