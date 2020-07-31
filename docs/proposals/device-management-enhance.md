@@ -55,7 +55,7 @@ attributes. Combining device properties and property visitors in device model de
    * Users can define collect cycle and report cycle to each property. For example, a temperature property may need be collected
    per second, while a throughput property may need be collected per hour.
 * Deal data of non-twin properties.
-  * Currently, only twin properties will be sync between edge and cloud. Non-twin properties are not processed by edge-core. 
+  * Currently, only twin properties will be sync between edge and cloud. Non-twin properties are not processed by edge-core.
   Time-Serial data are produced from devices and should have a way to allow user deal with these data.
 * Deal various industrial protocols
   * Currently, only Modbus, OPC-UA and bluetooth are supported by KubeEdge. However there are thousands of industrial protocols.
