@@ -26,6 +26,7 @@ to get the token.
 `
 )
 
+// NewGettoken gets the token for edge nodes to join the cluster
 func NewGettoken(out io.Writer, init *common.GettokenOptions) *cobra.Command {
 	if init == nil {
 		init = newGettokenOptions()
@@ -75,7 +76,7 @@ func queryToken(namespace string, name string, kubeConfigPath string) ([]byte, e
 
 // showToken prints the token
 func showToken(data []byte, out io.Writer) error {
-	_, err := out.Write(data)
+	_, err := fmt.Fprintln(out, string(data))
 	if err != nil {
 		return err
 	}

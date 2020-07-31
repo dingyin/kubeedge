@@ -26,7 +26,7 @@ import (
 
 	beehiveContext "github.com/kubeedge/beehive/pkg/core/context"
 	"github.com/kubeedge/beehive/pkg/core/model"
-	"github.com/kubeedge/kubeedge/cloud/pkg/apis/devices/v1alpha1"
+	"github.com/kubeedge/kubeedge/cloud/pkg/apis/devices/v1alpha2"
 	"github.com/kubeedge/kubeedge/cloud/pkg/devicecontroller/config"
 	"github.com/kubeedge/kubeedge/cloud/pkg/devicecontroller/constants"
 	"github.com/kubeedge/kubeedge/cloud/pkg/devicecontroller/messagelayer"
@@ -36,7 +36,7 @@ import (
 
 // DeviceStatus is structure to patch device status
 type DeviceStatus struct {
-	Status v1alpha1.DeviceStatus `json:"status"`
+	Status v1alpha2.DeviceStatus `json:"status"`
 }
 
 const (
@@ -125,7 +125,7 @@ func (uc *UpstreamController) updateDeviceStatus() {
 				klog.Warningf("Device %s does not exist in downstream controller", deviceID)
 				continue
 			}
-			cacheDevice, ok := device.(*v1alpha1.Device)
+			cacheDevice, ok := device.(*v1alpha2.Device)
 			if !ok {
 				klog.Warning("Failed to assert to CacheDevice type")
 				continue
@@ -134,7 +134,7 @@ func (uc *UpstreamController) updateDeviceStatus() {
 			for twinName, twin := range msgTwin.Twin {
 				for i, cacheTwin := range deviceStatus.Status.Twins {
 					if twinName == cacheTwin.PropertyName && twin.Actual != nil && twin.Actual.Value != nil {
-						reported := v1alpha1.TwinProperty{}
+						reported := v1alpha2.TwinProperty{}
 						reported.Value = *twin.Actual.Value
 						reported.Metadata = make(map[string]string)
 						if twin.Actual.Metadata != nil {
