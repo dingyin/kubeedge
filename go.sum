@@ -1110,6 +1110,7 @@ k8s.io/code-generator v0.0.0-20190612205613-18da4a14b22b/go.mod h1:G8bQwmHm2eafm
 k8s.io/code-generator v0.15.8-beta.1/go.mod h1:G8bQwmHm2eafm5bgtX67XDZQ8CWKSGu9DekI+yN4Y5I=
 k8s.io/code-generator v0.18.0 h1:0xIRWzym+qMgVpGmLESDeMfz/orwgxwxFFAo1xfGNtQ=
 k8s.io/code-generator v0.18.0/go.mod h1:+UHX5rSbxmR8kzS+FAv7um6dtYrZokQvjHpDSYRVkTc=
+k8s.io/code-generator v0.18.6 h1:QdfvGfs4gUCS1dru+rLbCKIFxYEV0IRfF8MXwY/ozLk=
 k8s.io/code-generator v0.18.6/go.mod h1:TgNEVx9hCyPGpdtCWA34olQYLkh3ok9ar7XfSsr8b6c=
 k8s.io/component-base v0.0.0-20190718183727-0ececfbe9772 h1:KvNHv5DejGm2lQZ+mD4T2cMpWK6BH/9kXJ6YQqt73u4=
 k8s.io/component-base v0.0.0-20190718183727-0ececfbe9772/go.mod h1:VLedAFwENz2swOjm0zmUXpAP2mV55c49xgaOzPBI/QQ=
