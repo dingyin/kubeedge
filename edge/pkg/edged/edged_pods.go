@@ -56,6 +56,7 @@ import (
 	"k8s.io/kubernetes/pkg/features"
 	"k8s.io/kubernetes/pkg/fieldpath"
 	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
+	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/kubernetes/pkg/kubelet/images"
 	"k8s.io/kubernetes/pkg/kubelet/cri/streaming/portforward"
 	"k8s.io/kubernetes/pkg/kubelet/cri/streaming/remotecommand"
@@ -812,7 +813,7 @@ func (e *edged) convertStatusToAPIStatus(pod *v1.Pod, podStatus *kubecontainer.P
 // convertToAPIContainerStatuses converts the given internal container
 // statuses into API container statuses.
 func (e *edged) convertToAPIContainerStatuses(pod *v1.Pod, podStatus *kubecontainer.PodStatus, previousStatus []v1.ContainerStatus, containers []v1.Container, hasInitContainers, isInitContainer bool) []v1.ContainerStatus {
-	convertContainerStatus := func(cs *kubecontainer.ContainerStatus) *v1.ContainerStatus {
+	convertContainerStatus := func(cs *api.ContainerStatus) *v1.ContainerStatus {
 		cid := cs.ID.String()
 		cstatus := &v1.ContainerStatus{
 			Name:         cs.Name,
@@ -947,12 +948,12 @@ func (e *edged) updatePodStatus(pod *v1.Pod) error {
 	if e.containerRuntime != nil {
 		podStatusRemote, err = e.containerRuntime.GetPodStatus(pod.UID, pod.Name, pod.Namespace)
 		if err != nil {
-			containerStatus := &kubecontainer.ContainerStatus{}
+			containerStatus := &api.ContainerStatus{}
 			kubeStatus := toKubeContainerStatus(v1.PodUnknown, containerStatus)
 			podStatus = &v1.PodStatus{Phase: v1.PodUnknown, ContainerStatuses: []v1.ContainerStatus{kubeStatus}}
 		} else {
 			if pod.DeletionTimestamp != nil {
-				containerStatus := &kubecontainer.ContainerStatus{State: kubecontainer.ContainerStateExited,
+				containerStatus := &api.ContainerStatus{State: kubecontainer.ContainerStateExited,
 					Reason: "Completed"}
 				kubeStatus := toKubeContainerStatus(v1.PodSucceeded, containerStatus)
 				podStatus = &v1.PodStatus{Phase: v1.PodSucceeded, ContainerStatuses: []v1.ContainerStatus{kubeStatus}}
@@ -993,7 +994,7 @@ func (e *edged) updatePodStatus(pod *v1.Pod) error {
 	return err
 }
 
-func toKubeContainerStatus(phase v1.PodPhase, status *kubecontainer.ContainerStatus) v1.ContainerStatus {
+func toKubeContainerStatus(phase v1.PodPhase, status *api.ContainerStatus) v1.ContainerStatus {
 	kubeStatus := v1.ContainerStatus{
 		Name:         status.Name,
 		RestartCount: int32(status.RestartCount),
