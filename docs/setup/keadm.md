@@ -1,6 +1,6 @@
 # Deploying using Keadm
 
-Keadm is used to install the cloud and edge components of KubeEdge. It is not responsible for installing K8s and runtime, so check [dependences](../getting-started.md#Dependencies) first.
+Keadm is used to install the cloud and edge components of KubeEdge. It is not responsible for installing K8s and runtime, so check dependences section in this [doc](../getting-started.md) first.
 
 Please refer [kubernetes-compatibility](https://github.com/kubeedge/kubeedge#kubernetes-compatibility) to get **Kubernetes compatibility** and determine what version of Kubernetes would be installed.
 
@@ -203,11 +203,11 @@ Before metrics-server deployed, `kubectl logs` feature must be activated:
     ``` shell
     systemctl restart edgecore.service
     ```
-    If you fail to restart edgecore, check if that is because of `kubeproxy` and kill it.  **kubeedge** reject it by default, we use a succedaneum called [edgemesh](https://github.com/kubeedge/kubeedge/blob/master/docs/proposals/edgemesh-design.md)
+    If you fail to restart edgecore, check if that is because of `kube-proxy` and kill it.  **kubeedge** reject it by default, we use a succedaneum called [edgemesh](https://github.com/kubeedge/kubeedge/blob/master/docs/proposals/edgemesh-design.md)
 
-    **Note:** the importance is to avoid `kubeproxy` being deployed on edgenode. There are two methods to solve it:
+    **Note:** the importance is to avoid `kube-proxy` being deployed on edgenode. There are two methods to solve it:
 
-    1. Add the following settings to `kubeproxy daemonset yaml`
+    1. Add the following settings by calling `kubectl edit daemonsets.apps -n kube-system kube-proxy`:
     ``` yaml
     affinity:
         nodeAffinity:
@@ -218,7 +218,7 @@ Before metrics-server deployed, `kubectl logs` feature must be activated:
                     operator: DoesNotExist
     ```
 
-    2. If you still want to run `kubeproxy`, ask **edgecore** not to check the environment by adding the env variable in `edgecore.service` :
+    2. If you still want to run `kube-proxy`, ask **edgecore** not to check the environment by adding the env variable in `edgecore.service` :
 
         ``` shell
         sudo vi /etc/kubeedge/edgecore.service
