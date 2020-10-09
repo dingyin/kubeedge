@@ -22,6 +22,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -51,7 +52,8 @@ func newTunnelServer() *TunnelServer {
 			ReadBufferSize:   1024,
 			Error: func(w http.ResponseWriter, r *http.Request, status int, reason error) {
 				w.WriteHeader(status)
-				w.Write([]byte(reason.Error()))
+				_, err := w.Write([]byte(reason.Error()))
+				klog.Errorf("failed to write http response, err: %v", err)
 			},
 		},
 	}
@@ -81,6 +83,9 @@ func (s *TunnelServer) getSession(id string) (*Session, bool) {
 func (s *TunnelServer) connect(r *restful.Request, w *restful.Response) {
 	hostNameOverride := r.HeaderParameter(stream.SessionKeyHostNameOveride)
 	interalIP := r.HeaderParameter(stream.SessionKeyInternalIP)
+	if interalIP == "" {
+		interalIP = strings.Split(r.Request.RemoteAddr, ":")[0]
+	}
 	con, err := s.upgrader.Upgrade(w, r.Request, nil)
 	if err != nil {
 		return
