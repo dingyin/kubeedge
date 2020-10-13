@@ -7,7 +7,6 @@ import (
 	"github.com/docker/docker/api/types/container"
 	api "k8s.io/kubernetes/pkg/apis/core"
 	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 const (
